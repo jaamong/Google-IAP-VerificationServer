@@ -22,14 +22,14 @@ public class Payment {
         //TODO 1. GoogleCredential 생성
         //     2. API 호출
 
-        //------------credential 생성 전 필요한 변수 선언-------------
+
+        //-----------------GoogleCredential 생성--------------------
+        //credential 생성 전 필요한 변수 선언
         String emailAddress = ""; // 서비스 계정을 생성하면서 발급받은 email address
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport = new NetHttpTransport(); //GoogleNetHttpTransport.newTrustedTransport();
 
-        //--------------본격적인 GoogleCredential 생성---------------
-            //json이든 p12이든 application.yml에 저장해서 @Value로 받아오는게 좋을듯
-
+        //본격적인 GoogleCredential 생성, (json이든 p12이든 application.yml에 저장해서 @Value로 받아오는게 좋을듯)
         // P12 비밀키 파일 방식
         GoogleCredential credential = new GoogleCredential.Builder()
                 .setTransport(httpTransport)
@@ -38,7 +38,6 @@ public class Payment {
                 .setServiceAccountPrivateKeyFromP12File(new File("P12File이위치한경로"))
                 .setServiceAccountScopes(Collections.singleton("https://www.googleapis.com/auth/androidpublisher"))
                 .build();
-
 
         // JSON 비밀키 파일 방식
         InputStream jsonInputStream = ResourceUtils.getURL();//InputStream 타입으로 json 파일 저장, ()안에 json 파일이 위치한 URL 입력
