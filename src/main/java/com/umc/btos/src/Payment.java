@@ -2,6 +2,7 @@ package com.umc.btos.src;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -18,12 +19,12 @@ import java.util.Collections;
 
 public class Payment {
 
-    public Payment() throws IOException, GeneralSecurityException {
+    public Payment() throws IOException, GeneralSecurityException, GoogleJsonResponseException {
         //TODO 1. GoogleCredential 생성
         //     2. API 호출
 
 
-        //-----------------GoogleCredential 생성--------------------
+        // ==================== GoogleCredential 생성 ====================
         //credential 생성 전 필요한 변수 선언
         String emailAddress = ""; // 서비스 계정을 생성하면서 발급받은 email address
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -47,7 +48,7 @@ public class Payment {
                 .createDelegated(emailAddress);
 
 
-        //----------------------API 호출------------------------
+        // ======================== API 호출 ========================
         String packageName = ""; //인앱 상품이 판매된 애플리케이션의 패키지 이름
         String productId = ""; //인앱 상품 SKU
         String purchaseToken = ""; //안드로이드에서 받아올 구매 토큰
