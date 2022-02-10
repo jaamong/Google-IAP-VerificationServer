@@ -26,7 +26,7 @@ public class Payment {
 
         // ==================== GoogleCredential 생성 ====================
         //credential 생성 전 필요한 변수 선언
-        String emailAddress = ""; // 서비스 계정을 생성하면서 발급받은 email address
+        String emailAddress = "themusic025@gmail.com"; // 서비스 계정을 생성하면서 발급받은 email address //임시로 에러 안나게하려고 채워넣음, emailAddress를 yml에 넣어둬야할까..?
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport = new NetHttpTransport(); //GoogleNetHttpTransport.newTrustedTransport();
 
@@ -50,7 +50,7 @@ public class Payment {
 
         // ======================== API 호출 ========================
         String packageName = ""; //인앱 상품이 판매된 애플리케이션의 패키지 이름
-        String productId = ""; //인앱 상품 SKU
+        String productId = ""; //인앱 상품 SKㅋU
         String purchaseToken = ""; //안드로이드에서 받아올 구매 토큰
 
         AndroidPublisher publisher = new AndroidPublisher.Builder(httpTransport, JSON_FACTORY, credential)
@@ -58,7 +58,7 @@ public class Payment {
                 .build();
 
         AndroidPublisher.Purchases.Products.Get get = publisher.purchases().products().get(packageName, productId, purchaseToken); //inapp 아이템의 구매 및 소모 상태 확인
-        ProductPurchase productPurchase = get.execute();
+        ProductPurchase productPurchase = get.execute(); //검증 결과
         System.out.println(productPurchase.toPrettyString());
 
         // 인앱 상품의 소비 상태. 0 아직 소비 안됨(Yet to be consumed) / 1 소비됨(Consumed)
