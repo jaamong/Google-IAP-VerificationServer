@@ -1,0 +1,10 @@
+google:
+  url: https://accounts.google.com/o/oauth2/v2/auth
+  client:
+    id:
+    secret:
+  callback:
+    url:
+  token:
+    url: https://oauth2.googleapis.com/token
+
