@@ -7,12 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,7 +42,7 @@ public class GoogleOauth {
         return GOOGLE_URL + "?" + parameterString;
     }
 
-    public String requestAccessToken(String code) {
+    public String requestAccessToken(String code) { //access token 및 refresh token 요청
         RestTemplate restTemplate = new RestTemplate();
 
         Map<String, Object> params = new HashMap<>();
