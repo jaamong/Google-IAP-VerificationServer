@@ -1,4 +1,4 @@
-package com.umc.btos.src;
+package com.umc.btos.src.validation;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -9,6 +9,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.androidpublisher.AndroidPublisher;
 import com.google.api.services.androidpublisher.model.ProductPurchase;
+import com.umc.btos.src.validation.model.PaymentReq;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
@@ -19,7 +20,8 @@ import java.util.Collections;
 
 public class Payment {
 
-    public Payment() throws IOException, GeneralSecurityException, GoogleJsonResponseException {
+
+    public Payment(PaymentReq paymentReq) throws IOException, GeneralSecurityException, GoogleJsonResponseException {
         //TODO 1. GoogleCredential 생성
         //     2. API 호출
 
@@ -41,7 +43,7 @@ public class Payment {
                 .build();
 
         // JSON 비밀키 파일 방식
-        InputStream jsonInputStream = ResourceUtils.getURL();//InputStream 타입으로 json 파일 저장, ()안에 json 파일이 위치한 URL 입력
+        InputStream jsonInputStream = ResourceUtils.getURL(); //InputStream 타입으로 json 파일 저장, ()안에 json 파일이 위치한 URL 입력
 
         GoogleCredential googleCredential = GoogleCredential.fromStream(jsonInputStream, httpTransport, JSON_FACTORY)
                 .createScoped(Collections.singleton("https://www.googleapis.com/auth/androidpublisher"))
@@ -49,15 +51,11 @@ public class Payment {
 
 
         // ======================== API 호출 ========================
-        String packageName = ""; //인앱 상품이 판매된 애플리케이션의 패키지 이름
-        String productId = ""; //인앱 상품 SKㅋU
-        String purchaseToken = ""; //안드로이드에서 받아올 구매 토큰
-
         AndroidPublisher publisher = new AndroidPublisher.Builder(httpTransport, JSON_FACTORY, credential)
-                .setApplicationName(packageName)
+                .setApplicationName(paymentReq.getPackageName())
                 .build();
 
-        AndroidPublisher.Purchases.Products.Get get = publisher.purchases().products().get(packageName, productId, purchaseToken); //inapp 아이템의 구매 및 소모 상태 확인
+        AndroidPublisher.Purchases.Products.Get get = publisher.purchases().products().get(paymentReq.getPackageName(), paymentReq.getProductId(), paymentReq.getPurchaseToken()); //inapp 아이템의 구매 및 소모 상태 확인
         ProductPurchase productPurchase = get.execute(); //검증 결과
         System.out.println(productPurchase.toPrettyString());
 
