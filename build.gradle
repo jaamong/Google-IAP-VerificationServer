@@ -33,9 +33,6 @@ dependencies {
     // Google Purchase API v2
     compileOnly('com.google.api-client:google-api-client:1.21.0')
     compileOnly('com.google.apis:google-api-services-androidpublisher:v2-rev22-1.21.0')
-    implementation('com.google.apis:google-api-services-plus:v1-rev590-1.25.0')
-
-
 
     // lombok
     implementation('org.projectlombok:lombok')
