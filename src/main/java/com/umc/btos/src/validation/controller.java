@@ -7,8 +7,8 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.androidpublisher.AndroidPublisher;
 import com.google.api.services.androidpublisher.model.ProductPurchase;
-import com.google.api.services.plus.Plus;
 import com.umc.btos.src.googleOauth.OauthController;
+import com.umc.btos.src.validation.model.PaymentReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,36 +26,21 @@ public class controller {
 
     @ResponseBody
     @GetMapping("/receipt-validation")
-    public String validationReceipt(String token) {
-
-        // ======================= 구글 로그인 =======================
-        oauthController.googleLogin();
-            //로그인하면서 받은 accessToken을 저기 아래 넣어주자
-            //아니면 안드에서 login API를 먼저 호출하고 accessToken을 받게한 후 이 API를 호출할 때 토큰을 넘겨주도록 할까?
+    public String validationReceipt(PaymentReq paymentReq, String accessToken) {
 
         // ================= Google Credential 생성 =================
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport = new NetHttpTransport(); //GoogleNetHttpTransport.newTrustedTransport();
         GoogleCredential credential = new GoogleCredential().setAccessToken(accessToken);
-        /*
-        Plus plus = new Plus.Builder(httpTransport,
-                JacksonFactory.getDefaultInstance(),
-                credential)
-                .setApplicationName("Google-PlusSample/1.0")
-                .build();
-        */
+
 
         // ======================== API 호출 ========================
-        String packageName = ""; //인앱 상품이 판매된 애플리케이션의 패키지 이름
-        String productId = ""; //인앱 상품 SKU
-        String purchaseToken = token; //안드로이드에서 받아올 구매 토큰
-
         AndroidPublisher publisher = new AndroidPublisher.Builder(httpTransport, JSON_FACTORY, credential)
-                .setApplicationName(packageName)
+                .setApplicationName(paymentReq.getPackageName())
                 .build();
 
         try {
-            AndroidPublisher.Purchases.Products.Get get = publisher.purchases().products().get(packageName, productId, purchaseToken); //inapp 아이템의 구매 및 소모 상태 확인
+            AndroidPublisher.Purchases.Products.Get get = publisher.purchases().products().get(paymentReq.getPackageName(), paymentReq.getProductId(), paymentReq.getPurchaseToken()); //inapp 아이템의 구매 및 소모 상태 확인
             ProductPurchase productPurchase = get.execute(); //검증 결과
             System.out.println(productPurchase.toPrettyString());
 
